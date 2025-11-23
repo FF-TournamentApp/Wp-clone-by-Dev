@@ -1,0 +1,851 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WP Clone by Dev - WhatsApp Style Chat App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+        
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .animate-fade-up {
+            animation: fadeUp 1s ease forwards;
+        }
+        
+        .animate-float {
+            animation: float 5s ease-in-out infinite;
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        .scroll-hidden {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        
+        .scroll-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #059669, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .chat-bubble {
+            position: relative;
+            background: #dcf8c6;
+            border-radius: 18px;
+            padding: 12px 16px;
+            margin: 10px 0;
+            max-width: 70%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .chat-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -10px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-top-color: #dcf8c6;
+            border-bottom: 0;
+            border-left: 0;
+            margin-bottom: -10px;
+        }
+        
+        .chat-bubble-right {
+            background: #ffffff;
+            margin-left: auto;
+        }
+        
+        .chat-bubble-right:after {
+            left: auto;
+            right: -10px;
+            border-left: 10px solid transparent;
+            border-right: 0;
+            border-top-color: #ffffff;
+        }
+        
+        .feature-card {
+            transition: all 0.3s ease;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #059669, #10b981);
+        }
+        
+        .screenshot-container {
+            perspective: 1000px;
+        }
+        
+        .screenshot {
+            transform-style: preserve-3d;
+            transition: transform 0.8s ease;
+        }
+        
+        .screenshot:hover {
+            transform: rotateY(10deg) rotateX(5deg);
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #059669, #10b981);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(5, 150, 105, 0.3);
+        }
+        
+        .download-btn:active {
+            transform: translateY(0);
+        }
+        
+        .download-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .download-btn:hover::after {
+            left: 100%;
+        }
+        
+        .floating-icon {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        .stats-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 28px;
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        
+        .testimonial-card::before {
+            content: """;
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 60px;
+            color: #e2e8f0;
+            font-family: serif;
+            line-height: 1;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 20px 0;
+        }
+        
+        .faq-question {
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding-top: 0;
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding-top: 15px;
+        }
+        
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+        
+        .faq-toggle {
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-mockup {
+            position: relative;
+            width: 300px;
+            height: 600px;
+            background: #1e293b;
+            border-radius: 40px;
+            padding: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .mobile-screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .mobile-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 25px;
+            background: #1e293b;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            z-index: 10;
+        }
+        
+        .chat-header {
+            background: #075e54;
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .chat-messages {
+            padding: 15px;
+            height: calc(100% - 130px);
+            overflow-y: auto;
+            background: #e5ddd5;
+        }
+        
+        .chat-input {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md py-4 sticky top-0 z-50">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold mr-3">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <span class="text-xl font-bold gradient-text">WP Clone</span>
+            </div>
+            
+            <div class="hidden md:flex space-x-8">
+                <a href="#features" class="text-gray-600 hover:text-emerald-500 transition">Features</a>
+                <a href="#screenshots" class="text-gray-600 hover:text-emerald-500 transition">Screenshots</a>
+                <a href="#testimonials" class="text-gray-600 hover:text-emerald-500 transition">Reviews</a>
+                <a href="#faq" class="text-gray-600 hover:text-emerald-500 transition">FAQ</a>
+            </div>
+            
+            <a href="#download" class="bg-emerald-500 text-white px-5 py-2 rounded-full font-medium hover:bg-emerald-600 transition shadow-md">
+                Download Now
+            </a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="bg-gradient-to-br from-emerald-600 to-emerald-700 text-white py-20 md:py-28 shadow-xl relative overflow-hidden">
+        <!-- Floating elements -->
+        <div class="floating-icon animate-float" style="top: 15%; left: 10%;">
+            <i class="fas fa-comment"></i>
+        </div>
+        <div class="floating-icon animate-float" style="top: 70%; right: 8%; animation-delay: 1s;">
+            <i class="fas fa-paper-plane"></i>
+        </div>
+        <div class="floating-icon animate-float" style="top: 30%; right: 15%; animation-delay: 2s;">
+            <i class="fas fa-bell"></i>
+        </div>
+        
+        <!-- Background circles -->
+        <div class="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl animate-pulse-slow"></div>
+        <div class="absolute bottom-10 right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-pulse-slow" style="animation-delay: 1s;"></div>
+        <div class="absolute top-1/2 left-1/3 w-24 h-24 bg-white/5 rounded-full blur-xl animate-pulse-slow" style="animation-delay: 2s;"></div>
+
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
+            <div class="md:w-1/2 mb-10 md:mb-0 text-center md:text-left scroll-hidden">
+                <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
+                    Experience WhatsApp-like<br>Chatting with <span class="gradient-text">WP Clone</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl mb-8 opacity-90 max-w-lg">
+                    A modern, fast, and secure messaging app with real-time chat, media sharing, and a beautiful interface.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                    <a href="#download" 
+                       class="download-btn text-white font-semibold px-8 py-4 rounded-xl shadow-lg inline-flex items-center justify-center">
+                        <i class="fas fa-download mr-2"></i> Download Now (APK)
+                    </a>
+                    
+                    <a href="#features" 
+                       class="border-2 border-white text-white font-semibold px-8 py-4 rounded-xl hover:bg-white hover:text-emerald-600 transition inline-flex items-center justify-center">
+                        <i class="fas fa-play-circle mr-2"></i> See Features
+                    </a>
+                </div>
+                
+                <div class="mt-8 flex items-center justify-center md:justify-start">
+                    <div class="flex -space-x-2">
+                        <div class="w-10 h-10 rounded-full bg-emerald-400 border-2 border-white flex items-center justify-center">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-emerald-600 border-2 border-white flex items-center justify-center">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                    </div>
+                    <p class="ml-3 text-sm">Trusted by 10,000+ users</p>
+                </div>
+            </div>
+            
+            <div class="md:w-1/2 flex justify-center scroll-hidden">
+                <div class="mobile-mockup animate-float">
+                    <div class="mobile-notch"></div>
+                    <div class="mobile-screen">
+                        <div class="chat-header">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-emerald-300 mr-3"></div>
+                                <div>
+                                    <p class="font-semibold">John Doe</p>
+                                    <p class="text-xs opacity-80">Online</p>
+                                </div>
+                            </div>
+                            <div class="flex space-x-4 text-lg">
+                                <i class="fas fa-video"></i>
+                                <i class="fas fa-phone"></i>
+                                <i class="fas fa-ellipsis-v"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-messages">
+                            <div class="chat-bubble">
+                                Hey there! How are you doing?
+                            </div>
+                            <div class="chat-bubble chat-bubble-right">
+                                I'm good! Just trying out this new WP Clone app.
+                            </div>
+                            <div class="chat-bubble">
+                                How do you like it so far?
+                            </div>
+                            <div class="chat-bubble chat-bubble-right">
+                                It's amazing! The UI is clean and messaging is super fast.
+                            </div>
+                            <div class="text-center my-4">
+                                <span class="bg-white px-3 py-1 rounded-full text-xs text-gray-500">Today</span>
+                            </div>
+                            <div class="chat-bubble chat-bubble-right">
+                                Definitely recommending this to my friends!
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input">
+                            <i class="fas fa-paperclip text-gray-400 mr-3"></i>
+                            <input type="text" placeholder="Type a message" class="flex-1 bg-gray-100 rounded-full px-4 py-2 focus:outline-none">
+                            <i class="fas fa-microphone text-gray-400 ml-3"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- FEATURES SECTION -->
+    <section id="features" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 scroll-hidden">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Amazing Features</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">WP Clone comes packed with features that make messaging enjoyable and efficient</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="feature-card bg-white p-6 rounded-2xl shadow-lg scroll-hidden">
+                    <div class="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-xl mb-4">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">Lightning Fast</h3>
+                    <p class="text-gray-600">Real-time messaging with instant delivery and read receipts.</p>
+                </div>
+                
+                <div class="feature-card bg-white p-6 rounded-2xl shadow-lg scroll-hidden">
+                    <div class="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-xl mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">End-to-End Encryption</h3>
+                    <p class="text-gray-600">Your conversations are secure and private with advanced encryption.</p>
+                </div>
+                
+                <div class="feature-card bg-white p-6 rounded-2xl shadow-lg scroll-hidden">
+                    <div class="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-xl mb-4">
+                        <i class="fas fa-images"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">Media Sharing</h3>
+                    <p class="text-gray-600">Share photos, videos, documents and more with ease.</p>
+                </div>
+                
+                <div class="feature-card bg-white p-6 rounded-2xl shadow-lg scroll-hidden">
+                    <div class="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-xl mb-4">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">Group Chats</h3>
+                    <p class="text-gray-600">Create groups with up to 256 participants for family, friends or work.</p>
+                </div>
+                
+                <div class="feature-card bg-white p-6 rounded-2xl shadow-lg scroll-hidden">
+                    <div class="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-xl mb-4">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">Cross-Platform</h3>
+                    <p class="text-gray-600">Works seamlessly across all your Android devices.</p>
+                </div>
+                
+                <div class="feature-card bg-white p-6 rounded-2xl shadow-lg scroll-hidden">
+                    <div class="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-xl mb-4">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">Cloud Backup</h3>
+                    <p class="text-gray-600">Automatically backup your chats and media to the cloud.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <!-- STATS SECTION -->
+<section class="py-16 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="stats-card scroll-hidden">
+                <div class="stats-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <h3 class="text-3xl font-bold mb-2">50K+</h3>
+                <p class="text-gray-200">Downloads</p>
+            </div>
+            
+            <div class="stats-card scroll-hidden">
+                <div class="stats-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3 class="text-3xl font-bold mb-2">1M+</h3>
+                <p class="text-gray-200">Messages Daily</p>
+            </div>
+            
+            <div class="stats-card scroll-hidden">
+                <div class="stats-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3 class="text-3xl font-bold mb-2">4.8</h3>
+                <p class="text-gray-200">Rating</p>
+            </div>
+            
+            <div class="stats-card scroll-hidden">
+                <div class="stats-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <h3 class="text-3xl font-bold mb-2">150+</h3>
+                <p class="text-gray-200">Countries</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- SCREENSHOTS SECTION -->
+    <section id="screenshots" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 scroll-hidden">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">App Screenshots</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Take a look at the beautiful and intuitive interface of WP Clone</p>
+            </div>
+            
+            <div class="flex overflow-x-auto pb-8 space-x-6 scrollbar-hide snap-x snap-mandatory">
+                <div class="screenshot-container flex-shrink-0 w-64 snap-center">
+                    <div class="screenshot bg-white rounded-2xl shadow-lg overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Chat Screen" class="w-full h-auto">
+                    </div>
+                </div>
+                
+                <div class="screenshot-container flex-shrink-0 w-64 snap-center">
+                    <div class="screenshot bg-white rounded-2xl shadow-lg overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1587560699334-cc4ff634909a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Contacts Screen" class="w-full h-auto">
+                    </div>
+                </div>
+                
+                <div class="screenshot-container flex-shrink-0 w-64 snap-center">
+                    <div class="screenshot bg-white rounded-2xl shadow-lg overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1587560699334-cc4ff634909a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Settings Screen" class="w-full h-auto">
+                    </div>
+                </div>
+                
+                <div class="screenshot-container flex-shrink-0 w-64 snap-center">
+                    <div class="screenshot bg-white rounded-2xl shadow-lg overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Media Screen" class="w-full h-auto">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS SECTION -->
+    <section id="testimonials" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 scroll-hidden">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">What Users Say</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Don't just take our word for it - hear from our satisfied users</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="testimonial-card scroll-hidden">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-emerald-100 mr-4"></div>
+                        <div>
+                            <h4 class="font-bold">Sarah Johnson</h4>
+                            <p class="text-sm text-gray-500">Product Designer</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"WP Clone has completely replaced WhatsApp for me. The interface is cleaner and it's much faster than the original app!"</p>
+                    <div class="flex text-amber-400 mt-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card scroll-hidden">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-emerald-100 mr-4"></div>
+                        <div>
+                            <h4 class="font-bold">Michael Chen</h4>
+                            <p class="text-sm text-gray-500">Software Engineer</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"As a developer, I appreciate the clean code and smooth performance. The encryption gives me peace of mind for my private conversations."</p>
+                    <div class="flex text-amber-400 mt-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card scroll-hidden">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-emerald-100 mr-4"></div>
+                        <div>
+                            <h4 class="font-bold">Emma Wilson</h4>
+                            <p class="text-sm text-gray-500">Marketing Manager</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"Our team uses WP Clone for all our work communications. The group features are perfect for coordinating projects and sharing updates."</p>
+                    <div class="flex text-amber-400 mt-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section id="faq" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 scroll-hidden">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Find answers to the most common questions about WP Clone</p>
+            </div>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="faq-item scroll-hidden">
+                    <div class="faq-question">
+                        <span>Is WP Clone free to use?</span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-600">Yes, WP Clone is completely free to download and use. There are no hidden charges or subscription fees.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item scroll-hidden">
+                    <div class="faq-question">
+                        <span>How is WP Clone different from WhatsApp?</span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-600">WP Clone offers a cleaner interface, faster performance, and additional customization options while maintaining the familiar WhatsApp experience.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item scroll-hidden">
+                    <div class="faq-question">
+                        <span>Is my data secure with WP Clone?</span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-600">Absolutely. We use end-to-end encryption to ensure your messages and media remain private and secure.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item scroll-hidden">
+                    <div class="faq-question">
+                        <span>Can I use WP Clone on multiple devices?</span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-600">Currently, WP Clone is designed for Android devices. We're working on iOS and web versions that will allow multi-device usage.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item scroll-hidden">
+                    <div class="faq-question">
+                        <span>How do I transfer my chats from WhatsApp?</span>
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-gray-600">We're developing a chat migration tool. For now, you can manually backup important chats and media before switching to WP Clone.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DOWNLOAD SECTION -->
+    <section id="download" class="py-20 bg-gradient-to-br from-emerald-600 to-emerald-700 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <div class="max-w-3xl mx-auto scroll-hidden">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Get Started?</h2>
+                <p class="text-xl mb-8 opacity-90">Download WP Clone now and experience the future of messaging</p>
+                
+                <a href="DevChat.apk" 
+                   class="download-btn text-white font-semibold px-10 py-5 rounded-xl shadow-lg inline-flex items-center justify-center text-lg mx-auto mb-6">
+                    <i class="fas fa-download mr-3"></i> Download WP Clone (APK)
+                </a>
+                
+                <p class="text-sm opacity-80">Version 2.1.0 | 15 MB | Android 6.0+</p>
+                
+                <div class="mt-12 flex flex-wrap justify-center gap-6">
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-emerald-300 mr-2"></i>
+                        <span>No Ads</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-emerald-300 mr-2"></i>
+                        <span>Free Forever</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-emerald-300 mr-2"></i>
+                        <span>Regular Updates</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold mr-3">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <span class="text-xl font-bold">WP Clone</span>
+                    </div>
+                    <p class="mt-2 text-gray-400">Modern messaging reimagined</p>
+                </div>
+                
+                <div class="flex space-x-6 text-2xl">
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>© 2025 WP Clone by Dev. All rights reserved.</p>
+                <p class="mt-2 text-sm">This is a demo project. Not affiliated with WhatsApp or Meta.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('scroll-visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-hidden').forEach(el => {
+            observer.observe(el);
+        });
+
+        // FAQ toggle
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentNode;
+                item.classList.toggle('active');
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add some interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add floating animation to download button on hover
+            const downloadBtn = document.querySelector('.download-btn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                downloadBtn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
